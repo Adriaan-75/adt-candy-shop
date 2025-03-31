@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADT Candy Shop</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #800080; color: white; text-align: center; }
+        .container { width: 80%; margin: auto; }
+        .product { border: 1px solid white; padding: 10px; margin: 10px; display: inline-block; }
+        button { background-color: white; color: #800080; padding: 5px 10px; border: none; cursor: pointer; }
+        input { margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>ADT Candy Shop</h1>
+    <h2>"KEEPING IT SWEET AT SCHOOL"</h2>
+    <div class="container">
+        <h3>Available Items</h3>
+        <div id="inventory"></div>
+        <h3>Order Form</h3>
+        <form id="orderForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <div id="orderItems"></div>
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+    <script>
+        let inventory = {
+            "Sandwiches": 15,
+            "Juice Boxes": 15,
+            "Tinkies": 10,
+            "Fruit": 5
+        };
+        
+        function displayInventory() {
+            let inventoryDiv = document.getElementById("inventory");
+            let orderItemsDiv = document.getElementById("orderItems");
+            inventoryDiv.innerHTML = "";
+            orderItemsDiv.innerHTML = "";
+            
+            for (let item in inventory) {
+                inventoryDiv.innerHTML += `<div class='product'>
+                    <p>${item} - R${inventory[item]}</p>
+                </div>`;
+                orderItemsDiv.innerHTML += `<div>
+                    <label for='${item}'>${item}</label>
+                    <input type='number' id='${item}' name='${item}' min='0' value='0'>
+                </div>`;
+            }
+        }
+        
+        document.getElementById("orderForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let name = document.getElementById("name").value.trim();
+            if (!name) {
+                alert("Please enter your name.");
+                return;
+            }
+            
+            let order = {};
+            let hasOrder = false;
+            
+            for (let item in inventory) {
+                let quantity = parseInt(document.getElementById(item).value, 10) || 0;
+                if (quantity > 0) {
+                    order[item] = quantity;
+                    hasOrder = true;
+                }
+            }
+            
+            if (!hasOrder) {
+                alert("Please select at least one item to order.");
+                return;
+            }
+            
+            console.log("Order from", name, order);
+            alert("Order placed successfully!");
+        });
+        
+        displayInventory();
+    </script>
+</body>
+</html>
